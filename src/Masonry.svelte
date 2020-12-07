@@ -1,6 +1,5 @@
 <script>  
   let items = [0,1,2,3,4,5,6,7,8,9];
-import App from './App.svelte';
   import {data} from './data';
 
   const copyToClipboard = (str) => {
@@ -24,12 +23,11 @@ import App from './App.svelte';
     let readme = atob(responseJSON.content);
     let imgTagRegex = /<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/;
     if (imgTagRegex.test(readme)) {
-      let res = readme.match(imgTagRegex);
-      console.log(res[1]);
+      let res = readme.match(imgTagRegex);      
       return res[1];      
     }
     else {
-      return 'github_repo.png'
+      return 'github-square-brands.svg';
     }
   }
 
@@ -41,14 +39,14 @@ import App from './App.svelte';
       <div class="masonry-item">
         <a href={item.html_url} target="_blank">
           <div class="masonry-content">
+           
             {#await getRepoImageURL(item.full_name)}
-              <p>loading...</p>
-            {:then res}
-              <img src={res}/>
+              <span> loading </span>
+            {:then src}
+             <img src="{src}" alt="image from repo: {item.name}" />
             {:catch error}
              <p style="color: red">{error.message}</p>
-            {/await} 
-            <!-- <img src="{item.src}" alt="{item.altText}"> -->
+            {/await}           
             <h3 class="masonry-title">{item.name}</h3>
             <p class="masonry-description">{item.description}</p>      
           </div>      
@@ -113,6 +111,11 @@ import App from './App.svelte';
   .masonry-content {
     overflow: hidden;
   }
+  .masonry-content img {
+    width:90%;
+    height:90%;
+  }
+
   .masonry-item {
     color: #111111;
     background-color: #f9f9f9;
