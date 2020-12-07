@@ -1,15 +1,16 @@
 <script lang="ts">  
   let items = [0,1,2,3,4,5,6,7,8,9];
+  import {data} from './data';
 </script>
 
 <div class="masonry-wrapper">
   <div class="masonry">
-    {#each items as item}      
+    {#each data.items as item}      
       <div class="masonry-item">
         <div class="masonry-content">
           <!-- <img src="{item.src}" alt="{item.altText}"> -->
-          <h3 class="masonry-title">Item {item}</h3>
-          <p class="masonry-description">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate consequuntur enim maiores nam eveniet. Eligendi, quisquam itaque officiis voluptatibus aliquam laboriosam architecto, animi tempora iste fuga sint libero dolorem magnam ducimus deserunt, ipsam consequatur repellendus. Optio perferendis neque dolor blanditiis.</p>      
+          <h3 class="masonry-title">{item.name}</h3>
+          <p class="masonry-description">{item.description}</p>      
         </div>      
     </div>
    {/each}
