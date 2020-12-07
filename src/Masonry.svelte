@@ -1,6 +1,20 @@
 <script>  
   let items = [0,1,2,3,4,5,6,7,8,9];
   import {data} from './data';
+
+  const copyToClipboard = (str) => {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    console.log('copied!');    
+  };
+
 </script>
 
 <div class="masonry-wrapper">
@@ -14,12 +28,13 @@
             <p class="masonry-description">{item.description}</p>      
           </div>      
         </a>
-    </div>
-    <div class="masonry-item-footer">
-      <span class="button icon fas fa-star">Stars</span> 
-      <div><i class="fas fa-star"/>Stars</div>
-      <div><i class="fas fa-code-branch"/>Forks</div>
-      <div><i class="fab fa-github"/>Clone Repo</div>
+        <div class="masonry-item-footer">
+          <ul class="button-group">
+            <li><span class="button"><i class="fas fa-star"/>{item.stargazers_count}</span></li>
+            <li><span class="button"><i class="fas fa-code-branch"/>{item.forks_count}</span></li>        
+            <li><span class="button primary" on:click={() => copyToClipboard(item.clone_url)}>Clone Repo <i class="fab fa-github"/></span></li>
+          </ul>
+        </div>
     </div>
    {/each}
   </div>
@@ -29,7 +44,6 @@
 </div>
 
 <style>
-
   a, a:hover, a:focus, a:active {
         text-decoration: none;
         color: inherit;
@@ -114,11 +128,15 @@
     height:25px;
   }
 
-  .masonry-item-footer div {
+  /* .button-group .button {
+      text-decoration: none;
+      color: inherit;    
+  } */
+  /* .masonry-item-footer li {
     display: inline-block;
     padding:0.2rem;
     height: 100%;
     background-color: red;
-  }
+  } */
 
 </style>
