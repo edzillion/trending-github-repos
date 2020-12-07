@@ -1,10 +1,12 @@
-<script>
-	export let name;
+<script>	
+	import Masonry from './Masonry.svelte'
+	let name = 'Ed';
 </script>
 
 <main>
 	<h1>Hello {name}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<Masonry></Masonry>
 </main>
 
 <style>
