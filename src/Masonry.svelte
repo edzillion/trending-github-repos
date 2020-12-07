@@ -3,8 +3,6 @@
   import { createEventDispatcher } from 'svelte';
   let dispatch = createEventDispatcher();
 
-  //let items = [0,1,2,3,4,5,6,7,8,9];
-  //import {data} from './data';
   export let items;  
   const copyToClipboard = (str) => {
     const el = document.createElement('textarea');
@@ -20,10 +18,8 @@
     dispatch('showToastEvent', "Clone URL copied to clipboard");
   };
 
-  const githubRepos = 'https://api.github.com/repos/'
-
   const getRepoImageURL = async (fullRepoName) => {
-    // const readmeReq = githubRepos + fullRepoName + '/readme';
+    // const readmeReq = 'https://api.github.com/repos/' + fullRepoName + '/readme';
     // let response = await fetch(readmeReq);
     // let responseJSON = await response.json();
     // let readme = atob(responseJSON.content);
@@ -35,6 +31,20 @@
     // else {
       return 'github-square-brands.svg';
     //}
+  }
+
+  const getRepoLanguages = async(url) => {
+    let response = await fetch("https://api.github.com/repos/baidu/boteye/languages");
+    let responseJSON = await response.json();
+    
+    return Object.keys(responseJSON);
+      
+    // let readme = atob(responseJSON.content);
+    // let imgTagRegex = /<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/;
+    // if (imgTagRegex.test(readme)) {
+    //   let res = readme.match(imgTagRegex);      
+    //   return res[1];      
+    // }
   }
 
 </script>
@@ -54,8 +64,21 @@
             {/await}           
             <h3 class="masonry-title">{item.name}</h3>
             <p class="masonry-description">{item.description}</p>      
-          </div>      
-        </a>
+          </div>
+        </a>  
+        <div class="masonry-content-language-swatches">
+          {#await getRepoLanguages(item.languages_url)}
+            <span> loading... </span>
+          {:then languages}
+            <ul class="button-group masonry-languages-button-group">          
+              {#each languages as lang}
+            <li on:click={()=> dispatch('repoLanguage', lang)} id="lang-{lang}" class="button primary pill">{lang}</li>
+              {/each}
+            </ul>
+          {:catch error}
+            {error}
+          {/await}
+        </div>
         <div class="masonry-item-footer">
           <ul class="button-group">
             <li><span class="button"><i class="fas fa-star"/>{item.stargazers_count}</span></li>
@@ -158,7 +181,8 @@
     /* padding: 1.5rem; */
     font-size: .75rem;
     border-top: 1px solid rgba(0, 0, 0, .05);
-    height:25px;
+    height:4em;
+    padding-top:4%
   }
 
   /* .button-group .button {
@@ -171,5 +195,15 @@
     height: 100%;
     background-color: red;
   } */
+
+  .masonry-languages-button-group {
+    width:100%;
+    margin-left:20%;
+    margin-right:20%;
+    margin-bottom:1em;
+  }
+  .masonry-languages-button-group li {
+    padding:2%    
+  }
 
 </style>
