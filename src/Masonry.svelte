@@ -1,7 +1,7 @@
 <script>  
-  let items = [0,1,2,3,4,5,6,7,8,9];
-  import {data} from './data';
-
+  //let items = [0,1,2,3,4,5,6,7,8,9];
+  //import {data} from './data';
+  export let items;  
   const copyToClipboard = (str) => {
     const el = document.createElement('textarea');
     el.value = str;
@@ -35,17 +35,16 @@
 
 <div class="masonry-wrapper">
   <div class="masonry">
-    {#each data.items as item}      
+    {#each items as item}      
       <div class="masonry-item">
         <a href={item.html_url} target="_blank">
-          <div class="masonry-content">
-           
+          <div class="masonry-content">           
             {#await getRepoImageURL(item.full_name)}
-              <span> loading </span>
+              <span> loading... </span>
             {:then src}
-             <img src="{src}" alt="image from repo: {item.name}" />
+              <img src="{src}" alt="image from repo: {item.name}" />
             {:catch error}
-             <p style="color: red">{error.message}</p>
+              <img src="github-square-brands.svg" alt="default image from repo: {item.name}" />
             {/await}           
             <h3 class="masonry-title">{item.name}</h3>
             <p class="masonry-description">{item.description}</p>      
