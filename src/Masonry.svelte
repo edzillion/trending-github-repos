@@ -1,4 +1,8 @@
 <script>  
+  import {log, LogLevel} from './logging';
+  import { createEventDispatcher } from 'svelte';
+  let dispatch = createEventDispatcher();
+
   //let items = [0,1,2,3,4,5,6,7,8,9];
   //import {data} from './data';
   export let items;  
@@ -11,24 +15,26 @@
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
-    document.body.removeChild(el);  
+    document.body.removeChild(el);
+    log(LogLevel.DEBUG, 'copyToClipboard');
+    dispatch('showToastEvent', "Clone URL copied to clipboard");
   };
 
   const githubRepos = 'https://api.github.com/repos/'
 
   const getRepoImageURL = async (fullRepoName) => {
-    const readmeReq = githubRepos + fullRepoName + '/readme';
-    let response = await fetch(readmeReq);
-    let responseJSON = await response.json();
-    let readme = atob(responseJSON.content);
-    let imgTagRegex = /<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/;
-    if (imgTagRegex.test(readme)) {
-      let res = readme.match(imgTagRegex);      
-      return res[1];      
-    }
-    else {
+    // const readmeReq = githubRepos + fullRepoName + '/readme';
+    // let response = await fetch(readmeReq);
+    // let responseJSON = await response.json();
+    // let readme = atob(responseJSON.content);
+    // let imgTagRegex = /<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/;
+    // if (imgTagRegex.test(readme)) {
+    //   let res = readme.match(imgTagRegex);      
+    //   return res[1];      
+    // }
+    // else {
       return 'github-square-brands.svg';
-    }
+    //}
   }
 
 </script>

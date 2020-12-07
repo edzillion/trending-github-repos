@@ -1,30 +1,42 @@
 <script>	
-	import Masonry from './Masonry.svelte'
+	import Masonry from './Masonry.svelte';
+	import Toast from './Toast.svelte';
+	import {log, LogLevel} from './logging';
 	let name = 'Ed';
+	let toastVisible = false;
+	let toastMessage = '';
 
-	const trendingReposRequestURL = 'https://api.github.com/search/repositories?q=created:>2017-01-10&sort=stars&order=desc';
-
-	const getTrendingData = async() => {
-		let request = await fetch(trendingReposRequestURL);
-		let response = await request.json();
-		console.log(response);
-		return response.items;
+	const toggleToast = (e) => {
+		log(LogLevel.DEBUG, 'toggleToast');
+		toastVisible = true;
+		toastMessage = e.detail;
 	}
 
-	let items = getTrendingData();
+	// const trendingReposRequestURL = 'https://api.github.com/search/repositories?q=created:>2017-01-10&sort=stars&order=desc';
+
+	// const getTrendingData = async() => {
+	// 	let request = await fetch(trendingReposRequestURL);
+	// 	let response = await request.json();
+	// 	console.log(response);
+	// 	return response.items;
+	// }
+
+	import {data} from './data';
+	let items = data.items;
 
 </script>
 
 <main>
+	<Toast {toastVisible} {toastMessage}  />
 	<h1>Hello {name}!</h1>
 	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-	{#await getTrendingData()}
+	<!-- {#await getTrendingData()}
 		<span>fetching treding data...</span>
-	{:then items}
-		<Masonry {items} />
-	{:catch error}
+	{:then items} -->
+		<Masonry {items} on:showToastEvent={toggleToast}/>
+	<!-- {:catch error}
 		<p style="color: red">{error.message}</p>
-	{/await}    
+	{/await}     -->
 	
 </main>
 
