@@ -1,5 +1,6 @@
 <script>  
   let items = [0,1,2,3,4,5,6,7,8,9];
+import App from './App.svelte';
   import {data} from './data';
 
   const copyToClipboard = (str) => {
@@ -11,9 +12,26 @@
     document.body.appendChild(el);
     el.select();
     document.execCommand('copy');
-    document.body.removeChild(el);
-    console.log('copied!');    
+    document.body.removeChild(el);  
   };
+
+  const githubRepos = 'https://api.github.com/repos/'
+
+  const getRepoImageURL = async (fullRepoName) => {
+    const readmeReq = githubRepos + fullRepoName + '/readme';
+    let response = await fetch(readmeReq);
+    let responseJSON = await response.json();
+    let readme = atob(responseJSON.content);
+    let imgTagRegex = /<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/;
+    if (imgTagRegex.test(readme)) {
+      let res = readme.match(imgTagRegex);
+      console.log(res[1]);
+      return res[1];      
+    }
+    else {
+      return 'github_repo.png'
+    }
+  }
 
 </script>
 
@@ -23,6 +41,13 @@
       <div class="masonry-item">
         <a href={item.html_url} target="_blank">
           <div class="masonry-content">
+            {#await getRepoImageURL(item.full_name)}
+              <p>loading...</p>
+            {:then res}
+              <img src={res}/>
+            {:catch error}
+             <p style="color: red">{error.message}</p>
+            {/await} 
             <!-- <img src="{item.src}" alt="{item.altText}"> -->
             <h3 class="masonry-title">{item.name}</h3>
             <p class="masonry-description">{item.description}</p>      
