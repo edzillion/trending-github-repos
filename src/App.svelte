@@ -4,7 +4,6 @@
 	import {log, LogLevel} from './logging';
 	import jQuery from "jquery";
 
-	let name = 'Ed';
 	let toastVisible = false;
 	let toastMessage = '';
 
@@ -23,21 +22,19 @@
 
 	const filterLanguages = (e) => {
 		log(LogLevel.DEBUG, 'amassLanguages', e.detail);
-		filters = [...filters, e.detail]
-		let result = jQuery('.masonry-item').not('#lang-'+e.detail).hide();
-		console.log({result});
-		// let langs = [...allLanguages, ...e.detail];
-		// allLanguages = [...new Set(langs)];
+		filters = [...filters, e.detail];
+		jQuery('.masonry-item').not('#lang-'+e.detail).hide();
+		filters = [...new Set(filters)];
 	}
 
-	// const trendingReposRequestURL = 'https://api.github.com/search/repositories?q=created:>2017-01-10&sort=stars&order=desc';
+	const trendingReposRequestURL = 'https://api.github.com/search/repositories?q=created:>2017-01-10&sort=stars&order=desc';
 
-	// const getTrendingData = async() => {
-	// 	let request = await fetch(trendingReposRequestURL);
-	// 	let response = await request.json();
-	// 	console.log(response);
-	// 	return response.items;
-	// }
+	const getTrendingData = async() => {
+		let request = await fetch(trendingReposRequestURL);
+		let response = await request.json();
+		console.log(response);
+		return response.items;
+	}
 
 	import {data} from './data';
 	let items = data.items;
@@ -46,24 +43,25 @@
 
 <main>
 	<Toast {toastVisible} {toastMessage}  />
-	<h1>Hello {name}!</h1>
-	<h3>Filters</h3>
+	<h1>Trending Github Repos</h1>
+	{#if filters.length > 0}
+		<h3>Filters</h3>
 		<div class="filter-box">
 			{#each filters as filter}			
 				<button>{filter}</button>			
 			{/each}
 		</div>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-	<!-- {#await getTrendingData()}
-		<span>fetching treding data...</span>
-	{:then items} -->
-	<span >
-		<Masonry {items} on:showToastEvent={toggleToast} on:repoLanguage={filterLanguages} />
-	</span>
-	<!-- {:catch error}
+	{/if}
+	<p>These repos are currently trending on Github.</p>
+	{#await getTrendingData()}
+		<span>fetching trending data...</span>
+	{:then items} 
+		<span >
+			<Masonry {items} on:showToastEvent={toggleToast} on:repoLanguage={filterLanguages} />
+		</span>
+	{:catch error}
 		<p style="color: red">{error.message}</p>
-	{/await}     -->
-	
+	{/await}
 </main>
 
 

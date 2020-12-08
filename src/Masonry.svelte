@@ -4,6 +4,7 @@
   let dispatch = createEventDispatcher();
 
   export let items;  
+  
   const copyToClipboard = (str) => {
     const el = document.createElement('textarea');
     el.value = str;
@@ -19,18 +20,18 @@
   };
 
   const getRepoImageURL = async (fullRepoName) => {
-    // const readmeReq = 'https://api.github.com/repos/' + fullRepoName + '/readme';
-    // let response = await fetch(readmeReq);
-    // let responseJSON = await response.json();
-    // let readme = atob(responseJSON.content);
-    // let imgTagRegex = /<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/;
-    // if (imgTagRegex.test(readme)) {
-    //   let res = readme.match(imgTagRegex);      
-    //   return res[1];      
-    // }
-    // else {
+    const readmeReq = 'https://api.github.com/repos/' + fullRepoName + '/readme';
+    let response = await fetch(readmeReq);
+    let responseJSON = await response.json();
+    let readme = atob(responseJSON.content);
+    let imgTagRegex = /<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/;
+    if (imgTagRegex.test(readme)) {
+      let res = readme.match(imgTagRegex);      
+      return res[1];      
+    }
+    else {
       return 'github-square-brands.svg';
-    //}
+    }
   }
 
   const getRepoLanguages = async(url) => {

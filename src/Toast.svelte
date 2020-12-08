@@ -8,12 +8,6 @@
 </div>
 
 <style>
-  .backdrop {
-    width:100%;
-    height:100%;
-    position:fixed;
-    background: rgba(0,0,0,0.7);  
-  }
 
   /* copied from https://www.w3schools.com/howto/howto_js_snackbar.asp */
   /* The snackbar - position it at the bottom and in the middle of the screen */
@@ -61,4 +55,5 @@
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
   } 
+  
 </style>
