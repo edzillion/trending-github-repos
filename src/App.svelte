@@ -32,12 +32,10 @@
 	const getTrendingData = async() => {
 		let request = await fetch(trendingReposRequestURL);
 		let response = await request.json();
-		console.log(response);
 		return response.items;
 	}
 
-	import {data} from './data';
-	let items = data.items;
+	log(LogLevel.INFO, 'initialised');
 
 </script>
 

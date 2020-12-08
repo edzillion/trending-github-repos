@@ -39,13 +39,6 @@
     let responseJSON = await response.json();
     
     return Object.keys(responseJSON);
-      
-    // let readme = atob(responseJSON.content);
-    // let imgTagRegex = /<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/;
-    // if (imgTagRegex.test(readme)) {
-    //   let res = readme.match(imgTagRegex);      
-    //   return res[1];      
-    // }
   }
 
 </script>
